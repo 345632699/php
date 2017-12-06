@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+    <script src="layer/layer.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    #addImg{
+        width: 40px;
+        height: 40px;
+        background: url("images/ico_add_pic.png") no-repeat;
+        background-size: 100% 100%;
+    }
+    #addImg input::-webkit-file-upload-button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        position: absolute;
+        outline: 0;
+        opacity: 0;
+    }
+    #addImg input#adminQrcode {
+        display: block;
+        width: auto;
+        border: 0;
+        vertical-align: middle;
+    }
+</style>
+
+<body>
+    <form action="upload_demo.php" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="images" class="col-sm-3 control-label"><i style="color:red;">*</i>图片预览，点击上传</label>
+            <div class="col-sm-8 groupQrcode">
+                <div id="addImg" style="border: 1px dashed #787A7C;">
+                    <input type="file" style="opacity: 0;" id="groupQrcode" name="groupQrcode" onchange="wechatImg()">
+                </div>
+            </div>
+        </div>
+        <input type="submit" />
+    </form>
+</body>
+<script>
+  function wechatImg(){
+    //选择图片上传表单
+    var imgObj = $('#groupQrcode');
+    //获取当前被上传的图片对象
+    var obj = imgObj[0].files[0];
+    //创建本地化可见视图
+    var imgUrl = window.URL.createObjectURL(obj);
+    //页面图片视图
+    var groupQrcode = $('.groupQrcode');
+    //往实图里添加图片，隐藏图片上传按钮
+    imgObj.parent().css('display','none');
+    $("<img>", {
+      src: imgUrl,
+      width: 100,
+      height: 100,
+      click: function() {
+        var _this = $(this);
+        layer.confirm('删除图片，重新选择', {
+          btn: ['确认','取消'] //按钮
+        }, function(){
+          _this.remove();
+          layer.msg('删除成功', {icon: 1});
+          var obj = document.getElementById('groupQrcode') ;
+          obj.outerHTML=obj.outerHTML;
+          imgObj.parent().css('display','block');
+        });
+      }
+    }).appendTo(groupQrcode);
+
+  }
+</script>
+</html>
